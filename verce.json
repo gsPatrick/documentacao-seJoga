@@ -1,0 +1,22 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "dist/main.js",
+        "use": "@vercel/node",
+         "config": {
+          "runtime": "nodejs18.x"
+          }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "dist/main.js"
+      },
+      {
+            "src": "/docs/(.*)",
+             "dest": "dist/src/docs/$1"
+          }
+    ]
+  }
