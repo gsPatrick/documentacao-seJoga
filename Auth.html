@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da API - Autenticação</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; color: #333; transition: background-color 0.3s ease;}
+        body:hover { background-color: #f0f0f0;}
+        .endpoint { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease; }
+        .endpoint:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .endpoint h2 { margin-top: 0; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .endpoint h3 { color: #34495e; margin-bottom: 10px;}
+        .endpoint p { margin-bottom: 10px; }
+        .endpoint ul { margin-bottom: 10px; padding-left: 20px;}
+        .endpoint li { margin-bottom: 5px; }
+        .code-block { background-color: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; overflow-x: auto;}
+        .response-code { font-weight: bold; color: #27ae60; margin-bottom: 5px; display: block; }
+        .try-it-out { display: inline-block; background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 5px; text-align: center; cursor: pointer; text-decoration: none; transition: background-color 0.3s ease; }
+        .try-it-out:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Documentação da API - Autenticação</h1>
+
+    <div class="endpoint">
+        <h2>POST /auth/signup</h2>
+        <p>Registra um novo usuário no sistema.</p>
+        <h3>Request Body:</h3>
+        <div class="code-block">
+            {
+                "name": "Nome do usuário",
+                "email": "email@teste.com",
+                 "cpf":"123.456.789-10",
+                 "phone":"11 99999-9999",
+                 "password": "senha123",
+                 "balance": 0
+            }
+         </div>
+        <h3>Retorno</h3>
+       <p><span class="response-code">201</span> Usuário registrado com sucesso.</p>
+        <div class="code-block">
+            {
+                "id": 1,
+                "name": "Nome do Usuário",
+                 "email":"email@teste.com",
+                "cpf": "123.456.789-10",
+                "phone": "11 99999-9999",
+               "balance": 0,
+              "role": "user",
+                "createdAt":"2025-01-27T14:00:00.000Z",
+                 "updatedAt":"2025-01-27T14:00:00.000Z"
+            }
+        </div>
+
+    </div>
+
+    <div class="endpoint">
+        <h2>POST /auth/signin</h2>
+        <p>Realiza o login do usuário no sistema.</p>
+        <h3>Request Body:</h3>
+        <div class="code-block">
+            {
+              "email": "email@teste.com",
+              "password": "senha123"
+            }
+         </div>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Login realizado com sucesso.</p>
+          <div class="code-block">
+           {
+               "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          </div>
+        
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /auth/users</h2>
+        <p>Lista todos os usuários cadastrados no sistema.</p>
+        <h3>Headers</h3>
+          <ul>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+            </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Lista de usuários cadastrados.</p>
+          <div class="code-block">
+           [
+           {
+             "id": 1,
+             "name":"Usuário Teste",
+             "email": "email@teste.com",
+            "cpf":"123.345.456-77",
+            "phone":"44 9 99999-9999",
+            "balance": 0,
+            "role":"user",
+             "createdAt": "2025-01-27T14:00:00.000Z",
+            "updatedAt": "2025-01-27T14:00:00.000Z"
+           }
+          ]
+        </div>
+      
+    </div>
+    
+    <div class="endpoint">
+       <h2>GET /auth/me</h2>
+       <p>Pega as informações do usuário logado no sistema.</p>
+          <h3>Headers</h3>
+            <ul>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+            </ul>
+         <h3>Retorno</h3>
+         <p><span class="response-code">200</span> Retorna as informações do usuário.</p>
+          <div class="code-block">
+           {
+            "id": 1,
+             "name":"Usuário Teste",
+              "email": "email@teste.com",
+              "cpf":"123.456.789-77",
+               "phone":"44 9 99999-9999",
+              "balance": 0,
+              "role":"user",
+             "createdAt":"2025-01-27T14:00:00.000Z",
+              "updatedAt":"2025-01-27T14:00:00.000Z"
+            }
+          </div>
+      
+    </div>
+
+     <div class="endpoint">
+        <h2>PUT /auth/me</h2>
+        <p>Atualiza as informações do usuário logado no sistema.</p>
+            <h3>Headers</h3>
+            <ul>
+                <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+            </ul>
+         <h3>Request Body:</h3>
+            <div class="code-block">
+            {
+                "name": "Novo Nome",
+                 "email":"novo_email@teste.com",
+                 "cpf":"123.456.789-10",
+                 "phone":"11 99999-9999"
+             }
+        </div>
+        <h3>Retorno</h3>
+         <p><span class="response-code">200</span> Usuário atualizado com sucesso.</p>
+         <div class="code-block">
+             {
+                "id": 1,
+               "name":"Novo Nome",
+                "email": "novo_email@teste.com",
+                  "cpf": "123.456.789-10",
+                "phone": "11 99999-9999",
+                  "balance":0,
+                 "role":"user",
+               "createdAt":"2025-01-27T14:00:00.000Z",
+                "updatedAt":"2025-01-27T14:00:00.000Z"
+               }
+          </div>
+            
+      </div>
+
+      <div class="endpoint">
+        <h2>PATCH /auth/me/balance</h2>
+        <p>Atualiza o saldo do usuário logado no sistema.</p>
+          <h3>Headers</h3>
+            <ul>
+                <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                 <li>`Content-Type: application/json`</li>
+             </ul>
+         <h3>Request Body:</h3>
+         <div class="code-block">
+           {
+             "amount": 100
+           }
+         </div>
+        <h3>Retorno</h3>
+         <p><span class="response-code">200</span> Saldo do usuário atualizado.</p>
+          <div class="code-block">
+            {
+                "id": 1,
+               "name": "Usuário Teste",
+               "email": "email@teste.com",
+               "cpf": "123.456.789-10",
+              "phone": "44 9 99999-9999",
+               "balance": 100,
+                "role":"user",
+               "createdAt": "2025-01-27T14:00:00.000Z",
+                "updatedAt":"2025-01-27T14:00:00.000Z"
+             }
+           </div>
+        </div>
+</body>
+</html>
