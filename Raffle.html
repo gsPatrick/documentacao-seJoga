@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da API - Rifas</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; color: #333; transition: background-color 0.3s ease;}
+        body:hover { background-color: #f0f0f0;}
+        .endpoint { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease; }
+        .endpoint:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .endpoint h2 { margin-top: 0; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .endpoint h3 { color: #34495e; margin-bottom: 10px;}
+        .endpoint p { margin-bottom: 10px; }
+        .endpoint ul { margin-bottom: 10px; padding-left: 20px;}
+        .endpoint li { margin-bottom: 5px; }
+        .code-block { background-color: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; overflow-x: auto;}
+        .response-code { font-weight: bold; color: #27ae60; margin-bottom: 5px; display: block; }
+        .try-it-out { display: inline-block; background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 5px; text-align: center; cursor: pointer; text-decoration: none; transition: background-color 0.3s ease; }
+    .try-it-out:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Documentação da API - Sistema de Rifas</h1>
+
+    <div class="endpoint">
+        <h2>POST /raffles/system</h2>
+        <p>Cria uma nova rifa tradicional no sistema.</p>
+        <h3>Retorno</h3>
+        <p><span class="response-code">201</span> Rifa tradicional criada com sucesso.</p>
+         <div class="code-block">
+            {
+                "id": 1,
+                "raffleIdentifier": "RIFA-1700000000000",
+                "type": "tradicional",
+                "createdBy": null,
+                "title": "Rifa Automática",
+                "description": "Rifa gerada automaticamente com base na hash xpto...",
+                "ticketPrice": 10.0,
+                "totalTickets": 100,
+                "soldTickets": 0,
+                "startDate": "2025-01-25T16:24:16.794Z",
+                "endDate": null,
+                "drawDate": null,
+                "finished": false,
+                "winningTicket": "25",
+               "createdAt": "2025-01-25T16:24:16.794Z",
+              "updatedAt": "2025-01-25T16:24:16.794Z"
+              
+            }
+        </div>
+            
+    </div>
+
+    <div class="endpoint">
+        <h2>POST /raffles/:raffleId/buy-tickets</h2>
+        <p>Compra bilhetes específicos para uma rifa.</p>
+       <h3>Parâmetros:</h3>
+            <ul>
+                <li>`raffleId` (number, path): ID da rifa.</li>
+              
+            </ul>
+         <h3>Headers</h3>
+             <ul>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                   <li>`Content-Type: application/json`</li>
+            </ul>
+        <h3>Request Body:</h3>
+        <div class="code-block">
+          {
+            "ticketNumbers": ["01", "05", "12"],
+              "type": "tradicional" // ou "equipes"
+            }
+        </div>
+        <h3>Retorno</h3>
+        <p><span class="response-code">201</span> Bilhetes comprados com sucesso.</p>
+        <div class="code-block">
+            [
+              {
+                "id": 1,
+                "userId": 1,
+                "raffleId": 1,
+                "ticketNumber": "01",
+               "createdAt": "2025-01-25T16:25:12.345Z",
+                 "updatedAt": "2025-01-25T16:25:12.345Z"
+            },
+            {
+              "id": 2,
+              "userId": 1,
+              "raffleId": 1,
+            "ticketNumber": "05",
+             "createdAt": "2025-01-25T16:25:12.345Z",
+                "updatedAt": "2025-01-25T16:25:12.345Z"
+            },
+            {
+              "id": 3,
+                "userId": 1,
+               "raffleId": 1,
+               "ticketNumber": "12",
+                "createdAt": "2025-01-25T16:25:12.345Z",
+                 "updatedAt": "2025-01-25T16:25:12.345Z"
+              }
+            ]
+        </div>
+       
+    </div>
+
+    <div class="endpoint">
+        <h2>POST /raffles/:raffleId/buy-random</h2>
+        <p>Compra bilhetes aleatórios para uma rifa tradicional.</p>
+           <h3>Parâmetros:</h3>
+            <ul>
+                <li>`raffleId` (number, path): ID da rifa.</li>
+              
+            </ul>
+           <h3>Headers</h3>
+             <ul>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+            </ul>
+        <h3>Request Body:</h3>
+        <div class="code-block">
+           {
+                "quantity": 3,
+                "type": "tradicional"
+            }
+        </div>
+        <h3>Retorno</h3>
+        <p><span class="response-code">201</span> Bilhetes comprados com sucesso.</p>
+        <div class="code-block">
+           [
+              {
+                    "id": 1,
+                    "userId": 1,
+                    "raffleId": 1,
+                   "ticketNumber": "01",
+                  "createdAt": "2025-01-25T16:25:12.345Z",
+                    "updatedAt": "2025-01-25T16:25:12.345Z"
+                 },
+                 {
+                    "id": 2,
+                    "userId": 1,
+                    "raffleId": 1,
+                   "ticketNumber": "05",
+                    "createdAt": "2025-01-25T16:25:12.345Z",
+                     "updatedAt": "2025-01-25T16:25:12.345Z"
+                 },
+                 {
+                     "id": 3,
+                    "userId": 1,
+                     "raffleId": 1,
+                   "ticketNumber": "12",
+                     "createdAt": "2025-01-25T16:25:12.345Z",
+                      "updatedAt": "2025-01-25T16:25:12.345Z"
+                }
+             ]
+        </div>
+            
+    </div>
+
+      <div class="endpoint">
+        <h2>GET /raffles</h2>
+        <p>Lista todas as rifas do sistema.</p>
+         <h3>Headers</h3>
+             <ul>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+             </ul>
+        <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Lista de rifas com detalhes.</p>
+        <div class="code-block">
+           [
+              {
+                    "id": 1,
+                   "raffleIdentifier": "RIFA-1700000000000",
+                    "type": "tradicional",
+                     "createdBy": {
+                        "id": 1,
+                        "name": "Teste User",
+                        "email": "teste@teste.com"
+                      },
+                    "winner": null,
+                   "title": "Rifa Automática",
+                     "description": "Rifa gerada automaticamente com base na hash xpto...",
+                    "ticketPrice": 10,
+                   "totalTickets": 100,
+                    "soldTickets": 0,
+                    "startDate": "2025-01-25T16:24:16.794Z",
+                     "endDate": "2025-01-25T18:24:16.794Z",
+                      "drawDate": null,
+                     "finished": true,
+                     "winningTicket": {
+                       "ticketNumber":"25",
+                         "numberId":1,
+                       "dezena": "25",
+                         "generatedNumber": 25,
+                         "sequence": 1,
+                          "seed": "dsadasdsadsad",
+                         "hash":"0xadasdsadasdas",
+                        "hashTimestamp":"2025-01-25T16:24:16.794Z"
+                    },
+                       "tickets":[
+                            {
+                              "id": 1,
+                              "ticketNumber": "01",
+                              "createdAt": "2025-01-25T16:25:12.345Z"
+                            },
+                            {
+                               "id": 2,
+                               "ticketNumber": "05",
+                                "createdAt": "2025-01-25T16:25:12.345Z"
+                            }
+                         ],
+                      "createdAt": "2025-01-25T16:24:16.794Z",
+                     "updatedAt":"2025-01-25T16:24:16.794Z"
+                }
+            ]
+        </div>
+            
+    </div>
+
+
+     <div class="endpoint">
+        <h2>POST /raffles/:raffleId/finalize</h2>
+        <p>Finaliza manualmente uma rifa tradicional.</p>
+          <h3>Parâmetros:</h3>
+          <ul>
+             <li>`raffleId` (number, path): ID da rifa.</li>
+           </ul>
+            <h3>Headers</h3>
+            <ul>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                 <li>`Content-Type: application/json`</li>
+            </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Rifa finalizada com sucesso.</p>
+          <div class="code-block">
+                {
+                "id": 1,
+                "raffleIdentifier": "RIFA-1700000000000",
+                "type": "tradicional",
+                "createdBy": null,
+                "title": "Rifa Automática",
+                "description": "Rifa gerada automaticamente com base na hash xpto...",
+                 "ticketPrice": 10.0,
+               "totalTickets": 100,
+                 "soldTickets": 0,
+                 "startDate": "2025-01-25T16:24:16.794Z",
+                  "endDate": "2025-01-25T18:24:16.794Z",
+                 "drawDate": null,
+                   "finished": true,
+                  "winningTicket": "25",
+                 "winnerUserId": 1,
+                   "createdAt": "2025-01-25T16:24:16.794Z",
+                 "updatedAt": "2025-01-25T16:24:16.794Z"
+                }
+           </div>
+         
+        </div>
+
+    <div class="endpoint">
+        <h2>GET /raffles/my/raffles</h2>
+        <p>Lista as rifas em que o usuário fez alguma aposta.</p>
+            <h3>Headers</h3>
+            <ul>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+               <li>`Content-Type: application/json`</li>
+             </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Lista de rifas jogadas.</p>
+        <div class="code-block">
+           [
+              {
+                 "id": 1,
+                  "raffleIdentifier": "RIFA-1700000000000",
+                   "type":"tradicional",
+                  "createdBy": null,
+                     "title":"Rifa Automática",
+                      "description":"Rifa gerada automaticamente com base na hash xpto...",
+                    "ticketPrice": 10,
+                    "totalTickets": 100,
+                    "soldTickets": 0,
+                      "startDate":"2025-01-25T16:24:16.794Z",
+                      "endDate":null,
+                      "drawDate":null,
+                      "finished":true,
+                        "winningTicket":{
+                            "ticketNumber":"25",
+                             "numberId": 1,
+                             "dezena":"25",
+                          "generatedNumber": 25,
+                          "sequence": 1,
+                         "seed": "dsadasdsadsad",
+                            "hash":"0xadasdsadasdas",
+                            "hashTimestamp":"2025-01-25T16:24:16.794Z"
+                       },
+                        "tickets":[
+                            {
+                              "id": 1,
+                              "ticketNumber": "01",
+                              "createdAt": "2025-01-25T16:25:12.345Z"
+                             },
+                             {
+                                "id": 2,
+                              "ticketNumber": "05",
+                              "createdAt": "2025-01-25T16:25:12.345Z"
+                           }
+                           ],
+                         "createdAt": "2025-01-25T16:24:16.794Z",
+                       "updatedAt":"2025-01-25T16:24:16.794Z"
+                }
+            ]
+        </div>
+    </div>
+
+     <div class="endpoint">
+        <h2>GET /raffles/my/raffles/won</h2>
+        <p>Lista as rifas em que o usuário ganhou.</p>
+            <h3>Headers</h3>
+            <ul>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+             </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Lista de rifas ganhas.</p>
+         <div class="code-block">
+          [
+            {
+                   "id": 1,
+                    "raffleIdentifier": "RIFA-1700000000000",
+                    "type": "tradicional",
+                    "createdBy": null,
+                     "title": "Rifa Automática",
+                      "description": "Rifa gerada automaticamente com base na hash xpto...",
+                     "ticketPrice": 10,
+                     "totalTickets": 100,
+                    "soldTickets": 0,
+                    "startDate": "2025-01-25T16:24:16.794Z",
+                     "endDate": null,
+                     "drawDate": null,
+                     "finished": true,
+                     "winningTicket":{
+                       "ticketNumber":"25",
+                        "numberId": 1,
+                       "dezena": "25",
+                       "generatedNumber": 25,
+                       "sequence": 1,
+                         "seed":"dsadasdsadsad",
+                          "hash":"0xadasdsadasdas",
+                         "hashTimestamp": "2025-01-25T16:24:16.794Z"
+                     },
+                         "tickets":[
+                            {
+                               "id": 1,
+                               "ticketNumber":"01",
+                             "createdAt": "2025-01-25T16:25:12.345Z"
+                             },
+                             {
+                                "id": 2,
+                                "ticketNumber":"05",
+                               "createdAt": "2025-01-25T16:25:12.345Z"
+                              }
+                         ],
+                       "createdAt":"2025-01-25T16:24:16.794Z",
+                     "updatedAt":"2025-01-25T16:24:16.794Z"
+                 }
+             ]
+        </div>
+    </div>
+ <div class="endpoint">
+        <h2>GET /raffles/my/raffles/lost</h2>
+        <p>Lista as rifas em que o usuário perdeu.</p>
+         <h3>Headers</h3>
+            <ul>
+                <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+             </ul>
+        <h3>Retorno</h3>
+         <p><span class="response-code">200</span> Lista de rifas perdidas.</p>
+          <div class="code-block">
+            [
+                {
+                    "id": 2,
+                     "raffleIdentifier": "RIFA-1700000000000",
+                      "type": "tradicional",
+                       "createdBy": null,
+                    "title":"Rifa Automática",
+                    "description": "Rifa gerada automaticamente com base na hash xpto...",
+                      "ticketPrice": 10,
+                       "totalTickets": 100,
+                       "soldTickets": 0,
+                       "startDate":"2025-01-25T16:24:16.794Z",
+                       "endDate":null,
+                       "drawDate": null,
+                        "finished": true,
+                       "winningTicket": {
+                        "ticketNumber":"25",
+                        "numberId": 1,
+                       "dezena": "25",
+                         "generatedNumber": 25,
+                        "sequence": 1,
+                           "seed":"dsadasdsadsad",
+                          "hash":"0xadasdsadasdas",
+                         "hashTimestamp": "2025-01-25T16:24:16.794Z"
+                        },
+                            "tickets":[
+                            {
+                              "id": 1,
+                            "ticketNumber":"01",
+                              "createdAt": "2025-01-25T16:25:12.345Z"
+                             },
+                              {
+                                 "id": 2,
+                                "ticketNumber":"05",
+                                 "createdAt": "2025-01-25T16:25:12.345Z"
+                             }
+                             ],
+                          "createdAt":"2025-01-25T16:24:16.794Z",
+                           "updatedAt":"2025-01-25T16:24:16.794Z",
+                     }
+               ]
+        </div>
+      
+        </div>
+
+          <div class="endpoint">
+        <h2>GET /raffles/my/data</h2>
+        <p>Lista dados do usuário com suas respectivas rifas.</p>
+           <h3>Headers</h3>
+            <ul>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                 <li>`Content-Type: application/json`</li>
+            </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Dados do usuário e suas rifas.</p>
+            <div class="code-block">
+                {
+                    "userId": 1,
+                    "name": "Usuário Teste",
+                    "email":"teste@teste.com",
+                     "cpf":"123.345.456-77",
+                     "phone": "44 9 99999-9999",
+                        "balance": 200,
+                    "raffles":[
+                     {
+                         "raffleId": 1,
+                            "raffleIdentifier": "RIFA-1700000000000",
+                          "title": "Rifa Automática",
+                           "description": "Rifa gerada automaticamente com base na hash xpto...",
+                         "ticketPrice": 10,
+                         "totalTickets": 100,
+                         "soldTickets": 0,
+                          "startDate": "2025-01-25T16:24:16.794Z",
+                           "endDate": null,
+                           "drawDate":null,
+                            "finished": true,
+                           "winningTicket":{
+                            "ticketNumber":"25",
+                              "numberId":1,
+                           "dezena": "25",
+                            "generatedNumber": 25,
+                             "sequence":1,
+                              "seed":"dsadasdsadsad",
+                               "hash":"0xadasdsadasdas",
+                             "hashTimestamp":"2025-01-25T16:24:16.794Z"
+                        },
+                           "winner": null,
+                             "createdBy": null,
+                            "createdAt": "2025-01-25T16:24:16.794Z",
+                            "updatedAt": "2025-01-25T16:24:16.794Z",
+                              "ticket":{
+                                   "ticketId": 1,
+                                   "ticketNumber": "01"
+                               }
+                      },
+                         {
+                           "raffleId": 2,
+                         "raffleIdentifier":"RIFA-EQUIPES-1700000000001",
+                           "title":"Rifa de Equipes Automática",
+                           "description":"Rifa de equipes gerada automaticamente com base na hash xpto...",
+                             "ticketPrice": 10,
+                            "totalTickets": 100,
+                            "soldTickets": 0,
+                          "startDate": "2025-01-25T16:24:16.794Z",
+                           "endDate": null,
+                            "drawDate":null,
+                           "finished":true,
+                             "winningTicket":{
+                              "ticketNumber":"25",
+                                "numberId": 1,
+                               "dezena": "25",
+                                "generatedNumber": 25,
+                               "sequence": 1,
+                                 "seed":"dsadasdsadsad",
+                                  "hash": "0xadasdsadasdas",
+                                 "hashTimestamp": "2025-01-25T16:24:16.794Z"
+                            },
+                           "winner": null,
+                            "createdBy": null,
+                            "createdAt":"2025-01-25T16:24:16.794Z",
+                              "updatedAt": "2025-01-25T16:24:16.794Z",
+                             "ticket":{
+                               "ticketId": 1,
+                             "ticketNumber": "12"
+                                }
+                        }
+                    ]
+           }
+        </div>
+            
+        </div>
+         <div class="endpoint">
+        <h2>POST /raffles/team/system</h2>
+        <p>Cria uma rifa de equipes do sistema.</p>
+           <h3>Headers</h3>
+            <ul>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+             </ul>
+        <h3>Retorno</h3>
+       <p><span class="response-code">201</span> Rifa de equipes criada com sucesso.</p>
+            <div class="code-block">
+           {
+                "id": 2,
+                "raffleIdentifier": "RIFA-EQUIPES-1700000000001",
+                "type": "equipes",
+                "createdBy": null,
+                "title": "Rifa de Equipes Automática",
+                "description": "Rifa de equipes gerada automaticamente com base na hash xpto...",
+                 "ticketPrice": 10.0,
+                "totalTickets": 100,
+                  "soldTickets": 0,
+                 "startDate": "2025-01-25T16:24:16.794Z",
+                "endDate": null,
+                "drawDate": null,
+                "finished": false,
+                "winningTicket":"25",
+                  "createdAt": "2025-01-25T16:24:16.794Z",
+                "updatedAt":"2025-01-25T16:24:16.794Z"
+            }
+          </div>
+             
+        </div>
+
+          <div class="endpoint">
+        <h2>POST /raffles/:raffleId/finalize-team</h2>
+        <p>Finaliza manualmente uma rifa de equipes.</p>
+           <h3>Parâmetros:</h3>
+            <ul>
+              <li>`raffleId` (number, path): ID da rifa.</li>
+            </ul>
+             <h3>Headers</h3>
+             <ul>
+                <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+               <li>`Content-Type: application/json`</li>
+             </ul>
+        <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Rifa de equipes finalizada com sucesso.</p>
+         <div class="code-block">
+           {
+             "id": 2,
+            "raffleIdentifier": "RIFA-EQUIPES-1700000000001",
+            "type":"equipes",
+              "createdBy": null,
+           "title": "Rifa de Equipes Automática",
+             "description": "Rifa de equipes gerada automaticamente com base na hash xpto...",
+               "ticketPrice": 10,
+            "totalTickets": 100,
+              "soldTickets": 0,
+             "startDate": "2025-01-25T16:24:16.794Z",
+            "endDate":"2025-01-25T18:24:16.794Z",
+             "drawDate": null,
+             "finished": true,
+               "winningTicket":"25",
+               "winnerUserId":1,
+                 "createdAt":"2025-01-25T16:24:16.794Z",
+                 "updatedAt":"2025-01-25T16:24:16.794Z"
+             }
+         </div>
+         
+        </div>
+       
+ <div class="endpoint">
+        <h2>GET /raffles/:raffleId/teams</h2>
+        <p>Lista as equipes de uma rifa de equipes específica.</p>
+         <h3>Parâmetros:</h3>
+            <ul>
+             <li>`raffleId` (number, path): ID da rifa.</li>
+            </ul>
+          <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Retorna as equipes da rifa.</p>
+        <div class="code-block">
+                {
+                    "raffleId": 1,
+                    "teams":[
+                        {
+                          "teamName": "Brasil",
+                           "tickets": [
+                              "0",
+                                "1",
+                                "2",
+                                "3"
+                             ],
+                             "members": [
+                                 {
+                                      "id": 1,
+                                       "name": "Usuário Teste",
+                                       "tickets": ["0","1"]
+                                 }
+                              ]
+                         },
+                            {
+                            "teamName": "Alemanha",
+                              "tickets":[
+                                  "4",
+                                  "5",
+                                  "6",
+                                 "7"
+                              ],
+                             "members":[
+                                  {
+                                      "id": 1,
+                                     "name": "Usuário Teste",
+                                     "tickets": ["5"]
+                                 }
+                              ]
+                          }
+                        ]
+                    }
+                
+            
+         </div>
+             
+    </div>
+    <div class="endpoint">
+        <h2>GET /raffles/:raffleId/teams-with-availability</h2>
+       <p>Lista as equipes de uma rifa de equipes, com os bilhetes disponíveis e os seus compradores.</p>
+         <h3>Parâmetros:</h3>
+            <ul>
+                <li>`raffleId` (number, path): ID da rifa.</li>
+            </ul>
+         <h3>Retorno</h3>
+         <p><span class="response-code">200</span> Retorna a lista de equipes com detalhes e bilhetes disponiveis.</p>
+        <div class="code-block">
+                 {
+    "raffleId": 10,
+    "teams": [
+        {
+            "teamName": "Brasil",
+            "tickets": [
+                "0",
+                "1",
+                "2",
+                "3"
+            ],
+            "members": [
+              {
+                "id": 1,
+                "name": "Usuário Teste",
+                "tickets": ["0","1"]
+              }
+            ]
+          },
+          {
+             "teamName": "Alemanha",
+            "tickets": [
+                "4",
+                "5",
+                "6",
+                "7"
+            ],
+             "members":[
+              {
+                "id": 1,
+                "name": "Usuário Teste",
+                "tickets": ["5"]
+              }
+            ]
+           },
+          {
+            "teamName": "Itália",
+              "tickets":[
+                "8",
+                 "9",
+                 "10",
+                 "11"
+              ],
+            "members":[]
+           },
+        {
+         "teamName": "Argentina",
+          "tickets":[
+            "12",
+            "13",
+            "14",
+            "15"
+            ],
+            "members": [
+                {
+                    "id": 1,
+                   "name": "Usuário Teste",
+                   "tickets": ["12"]
+                    }
+             ]
+        },
+        {
+           "teamName": "França",
+           "tickets":[
+            "16",
+            "17",
+            "18",
+             "19"
+           ],
+          "members":[]
+         },
+        {
+           "teamName": "Espanha",
+           "tickets":[
+               "20",
+               "21",
+               "22",
+               "23"
+           ],
+           "members":[
+            {
+                "id": 1,
+                "name": "Usuário Teste",
+                "tickets": ["22"]
+               }
+          ]
+          },
+        {
+            "teamName": "Inglaterra",
+             "tickets": [
+                 "24",
+                "25",
+                "26",
+                "27"
+            ],
+           "members":[]
+          },
+         {
+            "teamName": "Uruguai",
+           "tickets":[
+              "28",
+                "29",
+                "30",
+                 "31"
+            ],
+            "members":[]
+          },
+        {
+        "teamName": "Holanda",
+          "tickets": [
+             "32",
+              "33",
+              "34",
+              "35"
+            ],
+          "members":[]
+         },
+        {
+           "teamName": "Portugal",
+          "tickets":[
+              "36",
+              "37",
+              "38",
+              "39"
+            ],
+            "members":[]
+         },
+          {
+             "teamName": "Bélgica",
+             "tickets":[
+              "40",
+              "41",
+             "42",
+              "43"
+              ],
+             "members":[]
+        },
+       {
+            "teamName": "Croácia",
+            "tickets":[
+               "44",
+               "45",
+                "46",                "47"
+                ],
+                "members": [
+                  {
+                   "id": 1,
+                   "name": "Usuário Teste",
+                   "tickets": ["47"]
+                  }
+                ]
+           },
+        {
+            "teamName": "México",
+              "tickets":[
+                   "48",
+                   "49",
+                  "50",
+                  "51"
+                ],
+              "members":[]
+          },
+         {
+            "teamName": "Colômbia",
+              "tickets":[
+                  "52",
+                  "53",
+                   "54",
+                   "55"
+              ],
+              "members":[]
+        },
+      {
+          "teamName": "Chile",
+          "tickets":[
+            "56",
+            "57",
+             "58",
+             "59"
+           ],
+           "members":[]
+        },
+         {
+           "teamName":"Paraguai",
+            "tickets":[
+              "60",
+              "61",
+              "62",
+              "63"
+            ],
+           "members":[]
+          },
+         {
+          "teamName":"Estados Unidos",
+              "tickets":[
+                 "64",
+                  "65",
+                  "66",
+                 "67"
+               ],
+                "members": []
+             },
+        {
+           "teamName": "Rússia",
+              "tickets": [
+                "68",
+                  "69",
+                "70",
+                  "71"
+              ],
+             "members": []
+            },
+         {
+             "teamName":"Suécia",
+              "tickets":[
+                "72",
+               "73",
+                "74",
+                "75"
+              ],
+           "members":[]
+        },
+          {
+             "teamName": "Dinamarca",
+             "tickets":[
+               "76",
+              "77",
+               "78",
+               "79"
+              ],
+             "members":[]
+          },
+         {
+           "teamName":"Servia",
+              "tickets":[
+                 "80",
+                 "81",
+                 "82",
+                 "83"
+               ],
+             "members":[]
+          },
+          {
+              "teamName":"Japão",
+               "tickets":[
+                 "84",
+                  "85",
+                  "86",
+                   "87"
+                 ],
+             "members":[]
+           },
+          {
+             "teamName":"Coreia do Sul",
+              "tickets":[
+                 "88",
+                  "89",
+                  "90",
+                 "91"
+              ],
+            "members":[]
+          },
+         {
+           "teamName":"Camarões",
+             "tickets":[
+               "92",
+                "93",
+                 "94",
+                 "95"
+               ],
+              "members":[]
+            },
+        {
+          "teamName": "Nigéria",
+              "tickets":[
+                  "96",
+                  "97",
+                  "98",
+                   "99"
+             ],
+              "members":[
+                {
+                    "id": 1,
+                   "name": "Usuário Teste",
+                   "tickets": ["99"]
+                  }
+                ]
+          }
+        ],
+        "availableTickets": {
+          "Brasil": [
+              "2",
+              "3"
+          ],
+            "Alemanha":[
+               "4",
+              "6",
+              "7"
+          ],
+            "Itália":[
+                      "8",
+                      "9",
+                      "10",
+                      "11"
+               ],
+             "Argentina":[
+                      "13",
+                       "14",
+                       "15"
+              ],
+               "França": [
+                  "16",
+                   "17",
+                   "18",
+                    "19"
+              ],
+             "Espanha":[
+                   "20",
+                    "21",
+                     "23"
+                ],
+             "Inglaterra":[
+                 "24",
+                  "25",
+                   "26",
+                    "27"
+                ],
+              "Uruguai": [
+                "28",
+                  "29",
+                   "30",
+                   "31"
+               ],
+            "Holanda":[
+               "32",
+                "33",
+                "34",
+               "35"
+             ],
+            "Portugal":[
+               "36",
+                 "37",
+                 "38",
+                  "39"
+                ],
+             "Bélgica":[
+               "40",
+              "41",
+               "42",
+                 "43"
+              ],
+              "Croácia":[
+                "44",
+                 "45",
+                  "46"
+               ],
+            "México": [
+                "48",
+                  "49",
+                  "50",
+                  "51"
+             ],
+           "Colômbia":[
+                "52",
+                "53",
+                 "54",
+                "55"
+             ],
+        "Chile":[
+            "56",
+              "57",
+              "58",
+               "59"
+              ],
+        "Paraguai":[
+             "60",
+              "61",
+              "62",
+              "63"
+          ],
+         "Estados Unidos":[
+           "64",
+            "66",
+             "67"
+              ],
+       "Rússia":[
+              "68",
+              "69",
+               "70",
+               "71"
+             ],
+           "Suécia": [
+              "72",
+                "73",
+               "74",
+                "75"
+              ],
+          "Dinamarca":[
+              "76",
+              "77",
+              "78",
+              "79"
+              ],
+         "Servia":[
+           "80",
+            "81",
+              "82",
+             "83"
+            ],
+         "Japão":[
+              "84",
+                  "85",
+                 "86",
+                  "87"
+              ],
+      "Coreia do Sul":[
+         "88",
+          "89",
+           "90",
+          "91"
+            ],
+        "Camarões": [
+            "92",
+           "93",
+            "94",
+             "95"
+            ],
+        "Nigéria": [
+         "96",
+         "97",
+          "98"
+            ]
+        }
+  }
+            </div>
+             
+          </div>
+  
+        <div class="endpoint">
+          <h2>GET /raffles/my/data</h2>
+          <p>Lista dados do usuário com suas respectivas rifas.</p>
+            <h3>Headers</h3>
+              <ul>
+                  <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                  <li>`Content-Type: application/json`</li>
+               </ul>
+           <h3>Retorno</h3>
+           <p><span class="response-code">200</span> Dados do usuário e suas rifas.</p>
+              <div class="code-block">
+           {
+              "userId": 1,
+            "name": "Usuário Teste",
+             "email":"teste@teste.com",
+            "cpf":"123.345.456-77",
+             "phone": "44 9 99999-9999",
+             "balance": 200,
+              "raffles": [
+                  {
+                    "raffleId": 1,
+                      "raffleIdentifier": "RIFA-1700000000000",
+                        "title": "Rifa Automática",
+                        "description": "Rifa gerada automaticamente com base na hash xpto...",
+                         "ticketPrice": 10,
+                        "totalTickets": 100,
+                         "soldTickets": 0,
+                        "startDate":"2025-01-25T16:24:16.794Z",
+                        "endDate":null,
+                       "drawDate": null,
+                        "finished": true,
+                           "winningTicket":{
+                             "ticketNumber": "25",
+                              "numberId": 1,
+                              "dezena": "25",
+                               "generatedNumber": 25,
+                              "sequence": 1,
+                                "seed":"dsadasdsadsad",
+                               "hash":"0xadasdsadasdas",
+                              "hashTimestamp":"2025-01-25T16:24:16.794Z"
+                          },
+                          "winner":null,
+                            "createdBy": null,
+                          "createdAt": "2025-01-25T16:24:16.794Z",
+                          "updatedAt": "2025-01-25T16:24:16.794Z",
+                        "ticket":{
+                              "ticketId": 1,
+                              "ticketNumber": "01"
+                          }
+                      },
+                      {
+                          "raffleId": 2,
+                          "raffleIdentifier":"RIFA-EQUIPES-1700000000001",
+                          "title":"Rifa de Equipes Automática",
+                          "description":"Rifa de equipes gerada automaticamente com base na hash xpto...",
+                            "ticketPrice": 10,
+                          "totalTickets": 100,
+                          "soldTickets": 0,
+                            "startDate":"2025-01-25T16:24:16.794Z",
+                            "endDate":null,
+                             "drawDate": null,
+                           "finished": true,
+                            "winningTicket":{
+                             "ticketNumber":"25",
+                              "numberId":1,
+                             "dezena":"25",
+                             "generatedNumber": 25,
+                               "sequence": 1,
+                               "seed": "dsadasdsadsad",
+                                "hash": "0xadasdsadasdas",
+                               "hashTimestamp": "2025-01-25T16:24:16.794Z"
+                        },
+                             "winner":null,
+                             "createdBy": null,
+                              "createdAt":"2025-01-25T16:24:16.794Z",
+                              "updatedAt":"2025-01-25T16:24:16.794Z",
+                           "ticket": {
+                             "ticketId": 1,
+                             "ticketNumber": "12"
+                            }
+                        }
+                      ]
+             }
+          </div>
+          
+      </div>
+  </body>
+  </html>
