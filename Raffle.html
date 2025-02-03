@@ -18,9 +18,37 @@
         .response-code { font-weight: bold; color: #27ae60; margin-bottom: 5px; display: block; }
         .try-it-out { display: inline-block; background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 5px; text-align: center; cursor: pointer; text-decoration: none; transition: background-color 0.3s ease; }
     .try-it-out:hover { background-color: #2980b9; }
+    .cron-info { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; background-color: #f9f9f9; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+     .cron-info h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .cron-info p { margin-bottom: 10px; }
+
     </style>
 </head>
 <body>
+    <h1 style="text-align: center;">Documentação da API - Sistema de Rifas</h1>
+
+    <div class="cron-info">
+       <h2>Cron Jobs</h2>
+          <p>Este sistema utiliza cron jobs para automatizar a criação e finalização das rifas:</p>
+
+            <h3>Criação de Rifa Tradicional</h3>
+              <p>Rifas tradicionais são criadas automaticamente nos seguintes horários:</p>
+            <ul>
+                <li>8h, 10h, 12h, 14h, 16h, 18h e 20h</li>
+            </ul>
+               <p>O sistema utiliza uma hash e seed da blockchain para gerar um número aleatório que será usado para a criação da rifa, e o numero da sorte será a última dezena do número gerado.</p>
+          
+            <h3>Criação de Rifa de Equipe</h3>
+               <p>Rifas de equipes são criadas automaticamente nos seguintes horários:</p>
+            <ul>
+               <li>8h, 10h, 12h, 14h, 16h, 18h e 20h</li>
+           </ul>
+               <p>O sistema utiliza uma hash e seed da blockchain para gerar um número aleatório que será usado para a criação da rifa.
+            Os tickets dessas rifas são organizados em equipes de 4 números, cada equipe tem o nome de um pais.</p>
+           <h3>Finalização de Rifas</h3>
+           <p>Todos os tipos de rifas são finalizados automaticamente a cada minuto. Caso a data de termino da rifa já tenha sido alcançada ou se todos os tickets tiverem sido comprados.</p>
+           <p>Após a finalização o sistema notifica os vencedores, credita os seus premios, e também notifica os outros membros do time (rifas de equipe)</p>
+     </div>
     <h1 style="text-align: center;">Documentação da API - Sistema de Rifas</h1>
 
     <div class="endpoint">
