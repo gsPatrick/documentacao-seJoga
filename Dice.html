@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentação da API - Jogo de Dados</title>
+    <title>Documentação da API - Jogo de Dados Atualizada</title>
     <style>
        body { font-family: 'Arial', sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; color: #333; transition: background-color 0.3s ease;}
         body:hover { background-color: #f0f0f0;}
@@ -21,34 +21,75 @@
         .cron-info { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; background-color: #f9f9f9; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
          .cron-info h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
             .cron-info p { margin-bottom: 10px; }
+            .table-types { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            .table-types th, .table-types td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            .table-types th { background-color: #f2f2f2; }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">Documentação da API - Jogo de Dados</h1>
+    <h1 style="text-align: center;">Documentação da API - Jogo de Dados (Atualizada)</h1>
 
      <div class="cron-info">
-            <h2>Lógica do Jogo de Dados</h2>
-               <p>Este jogo de dados utiliza um sistema de hash da blockchain para gerar números aleatórios pseudoaleatórios para o resultado dos dados. </p>
-           <p>  Cada vez que o usuário joga, um número é gerado sequencialmente a partir da seed mais recente da blockchain, garantindo que os números nunca se repitam.</p>
-           <p> Após a geração do número, ele é mapeado para um resultado de dado, ou seja, ele será um número entre 0 e 6.</p>
-        <p>O sistema tem 3 modos de jogo:</p>
-            <ul>
-                <li>**Dupla:** O usuário joga dois dados. Nesse tipo o usuario pode escolher:
-                        * Acertar a soma exata dos dois dados em um valor definido da dezena.
-                        * Acertar um resultado exato nos dois dados (1 e 1, 2 e 2, etc.).
-                        * Acertar um número especifico.
-                        * Acertar a soma em um número específico
-                    </li>
-                <li>**Tripla:** O usuário joga três dados, com a mesma lógica de vitória da rodada dupla.</li>
-            </ul>
-        </div>
+            <h2>Lógica e Tipos de Aposta do Jogo de Dados</h2>
+               <p>Este jogo de dados utiliza um sistema de hash da blockchain para gerar números pseudoaleatórios para o resultado dos dados, garantindo resultados justos e transparentes.</p>
+           <p>  A cada rodada e aposta, um número é gerado sequencialmente a partir de uma seed (semente aleatória) associada à hash mais recente da blockchain. Isso garante que os números gerados sejam imprevisíveis e não se repitam na mesma sequência.</p>
+           <p> Após a geração, o número é mapeado para um resultado de dado, resultando em um número inteiro entre 0 e 6, simulando um dado de 7 faces.</p>
+
+        <h2>Tipos de Aposta</h2>
+        <p>O sistema oferece três modos de jogo, cada um com variações para dados duplos e triplos:</p>
+
+        <table class="table-types">
+            <thead>
+                <tr>
+                    <th>Tipo de Dado</th>
+                    <th>Tipo de Aposta</th>
+                    <th>Descrição</th>
+                    <th>Como Ganhar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="3"><strong>Dado Duplo</strong></td>
+                    <td><strong>Par Escolhido</strong></td>
+                    <td>Aposte em um número específico (0-6).</td>
+                    <td>Acerte o número em um dos dois dados para ganhar chances extras. Apostas são feitas a cada rolagem, mesmo nas chances extras, até errar ambos os dados.</td>
+                </tr>
+                <tr>
+                    <td><strong>Aleatório (Par Aleatório)</strong></td>
+                    <td>Aposte no resultado 'par' sem escolher um número específico.</td>
+                    <td>Ganhe se ambos os dados rolados resultarem no mesmo número (ex: 1 e 1, 5 e 5).</td>
+                </tr>
+                <tr>
+                    <td><strong>Soma</strong></td>
+                    <td>Aposte em um número que representa a soma dos dois dados (2-12).</td>
+                    <td>Ganhe se a soma dos valores dos dois dados for exatamente o número apostado.</td>
+                </tr>
+                 <tr>
+                    <td rowspan="3"><strong>Dado Triplo</strong></td>
+                    <td><strong>Tripla Escolhida</strong></td>
+                    <td>Aposte em um número específico (0-6).</td>
+                    <td>Acerte o número em todos os três dados em até 3 tentativas. Apostas são feitas a cada tentativa.</td>
+                </tr>
+                <tr>
+                    <td><strong>Aleatório (Tripla Aleatória)</strong></td>
+                    <td>Aposte no resultado 'tripla' sem escolher um número específico.</td>
+                    <td>Ganhe se todos os três dados rolados resultarem no mesmo número (ex: 2, 2 e 2, 6, 6 e 6).</td>
+                </tr>
+                <tr>
+                    <td><strong>Soma</strong></td>
+                    <td>Aposte em um número que representa a soma dos três dados (3-18).</td>
+                    <td>Ganhe se a soma dos valores dos três dados for exatamente o número apostado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="endpoint">
-        <h2>POST /dice/round/system</h2>
+        <h2>POST /dice/round</h2>
         <p>Cria uma nova rodada do jogo de dados.</p>
            <h3>Headers</h3>
             <ul>
-                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]` - Token JWT de autenticação do usuário.</li>
                 <li>`Content-Type: application/json`</li>
             </ul>
         <h3>Retorno</h3>
@@ -66,56 +107,65 @@
 
     <div class="endpoint">
         <h2>POST /dice/:roundId/buy-tickets</h2>
-        <p>Compra bilhetes para uma rodada do jogo de dados.</p>
+        <p>Compra bilhetes para uma rodada do jogo de dados, permitindo fazer apostas em diferentes modalidades.</p>
         <h3>Parâmetros:</h3>
            <ul>
-                <li>`roundId` (number, path): ID da rodada.</li>
+                <li>`roundId` (number, path): ID da rodada em que a aposta será realizada.</li>
             </ul>
              <h3>Headers</h3>
             <ul>
-               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]` - Token JWT de autenticação do usuário.</li>
                <li>`Content-Type: application/json`</li>
             </ul>
         <h3>Request Body:</h3>
           <div class="code-block">
            {
-             "betNumber": 2,
-              "betAmount": 10,
-               "type": "dupla" ou "tripla"
+             "betNumber": 2,          // Opcional dependendo do tipo de aposta. Necessário para 'par_escolhido', 'tripla_escolhida' e 'soma'. Nulo para 'aleatorio_dupla' e 'aleatorio_tripla'.
+              "betAmount": 10,         // Valor da aposta.
+               "type": "par_escolhido" | "tripla_escolhida" | "soma" | "aleatorio_dupla" | "aleatorio_tripla" // Tipo da aposta conforme a tabela de Tipos de Aposta.
             }
          </div>
          <h3>Retorno</h3>
-          <p><span class="response-code">201</span> Bilhetes comprados com sucesso.</p>
+          <p><span class="response-code">201</span> Bilhetes comprados com sucesso. Retorna um array de objetos `DiceBet` representando cada aposta realizada.</p>
           <div class="code-block">
-             {
-                "id": 1,
-                "userId": 1,
-              "roundId": 1,
-                "betNumber": 2,
-               "betAmount": 10,
-                "win": false,
-              "generatedNumber": 1,
-                "createdAt": "2025-01-27T14:00:00.000Z",
-                "updatedAt": "2025-01-27T14:00:00.000Z"
-             }
+             [
+               {
+                    "id": 1,
+                    "userId": 1,
+                    "roundId": 1,
+                    "betNumber": 2,       // Número apostado (pode ser nulo para apostas aleatórias)
+                    "betAmount": 10,
+                    "type": "par_escolhido", // Tipo da aposta realizada
+                    "win": false,
+                    "generatedNumber": 1,  // Número gerado para esta aposta
+                    "createdAt": "2025-01-27T14:00:00.000Z",
+                    "updatedAt": "2025-01-27T14:00:00.000Z"
+                },
+                // ... outras apostas caso haja chances extras ou tentativas múltiplas
+             ]
          </div>
-    
+            <h3>Observações Importantes:</h3>
+            <ul>
+                <li>O campo `betNumber` é obrigatório para os tipos de aposta 'par_escolhido', 'tripla_escolhida' e 'soma'. Para apostas do tipo 'soma', o `betNumber` deve estar dentro dos intervalos válidos (2-12 para soma dupla, 3-18 para soma tripla).</li>
+                <li>Para os tipos 'aleatorio_dupla' e 'aleatorio_tripla', o campo `betNumber` deve ser omitido ou nulo, pois o jogador não escolhe um número específico.</li>
+                <li>A resposta pode retornar um array com múltiplas apostas em casos de 'par_escolhido' e 'tripla_escolhida' devido às chances extras e tentativas, respectivamente.</li>
+            </ul>
         </div>
 
          <div class="endpoint">
         <h2>POST /dice/:roundId/finalize</h2>
-        <p>Finaliza manualmente uma rodada de dado.</p>
+        <p>Finaliza manualmente uma rodada de dado, calcula os resultados e distribui os prêmios.</p>
           <h3>Parâmetros:</h3>
             <ul>
-             <li>`roundId` (number, path): ID da rodada.</li>
+             <li>`roundId` (number, path): ID da rodada a ser finalizada.</li>
           </ul>
            <h3>Headers</h3>
             <ul>
-              <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+              <li>`Authorization: Bearer [seu_token_jwt_valido]` - Token JWT de autenticação (pode ser necessário dependendo das permissões).</li>
                 <li>`Content-Type: application/json`</li>
             </ul>
          <h3>Retorno</h3>
-        <p><span class="response-code">200</span> Rodada de dado finalizada com sucesso.</p>
+        <p><span class="response-code">200</span> Rodada de dado finalizada com sucesso. Retorna o objeto `DiceRound` finalizado, incluindo as apostas e seus resultados.</p>
            <div class="code-block">
              {
               "id": 1,
@@ -130,11 +180,13 @@
                     "roundId": 1,
                       "betNumber": 2,
                       "betAmount": 10,
-                    "win": false,
+                      "type": "par_escolhido", // Tipo da aposta finalizada
+                    "win": true,              // Indica se a aposta foi vencedora ou não
                     "generatedNumber": 1,
                     "createdAt":"2025-01-27T14:00:00.000Z",
                        "updatedAt": "2025-01-27T14:00:00.000Z"
-                }
+                },
+                 // ... outras apostas com seus resultados
              ],
              "updatedAt":"2025-01-27T14:00:00.000Z"
            }
@@ -144,14 +196,14 @@
         
   <div class="endpoint">
         <h2>GET /dice/my/rounds</h2>
-        <p>Lista as rodadas do jogo de dado de um usuário específico.</p>
+        <p>Lista as rodadas do jogo de dado em que o usuário autenticado participou (fez apostas).</p>
           <h3>Headers</h3>
              <ul>
-              <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+              <li>`Authorization: Bearer [seu_token_jwt_valido]` - Token JWT de autenticação do usuário.</li>
                 <li>`Content-Type: application/json`</li>
             </ul>
          <h3>Retorno</h3>
-        <p><span class="response-code">200</span> Lista de rodadas que o usuario participou.</p>
+        <p><span class="response-code">200</span> Lista de rodadas que o usuário participou, incluindo detalhes de cada rodada e suas apostas.</p>
          <div class="code-block">
              [
                 {
@@ -167,14 +219,17 @@
                         "roundId":1,
                        "betNumber": 2,
                         "betAmount": 10,
+                        "type": "par_escolhido", // Tipo da aposta
                         "win": false,
                       "generatedNumber": 1,
                       "createdAt":"2025-01-27T14:00:00.000Z",
                      "updatedAt":"2025-01-27T14:00:00.000Z"
-                     }
+                     },
+                     // ... outras apostas do usuário nesta rodada
                   ],
                "updatedAt": "2025-01-27T14:00:00.000Z"
-                }
+                },
+                // ... outras rodadas que o usuário participou
              ]
          </div>
       
@@ -182,14 +237,14 @@
 
     <div class="endpoint">
         <h2>GET /dice</h2>
-        <p>Lista todas as rodadas de dado do sistema.</p>
+        <p>Lista todas as rodadas de dado do sistema, com detalhes resumidos de cada rodada.</p>
          <h3>Headers</h3>
             <ul>
-                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]` - Token JWT de autenticação (opcional, dependendo se o endpoint é público ou restrito).</li>
                 <li>`Content-Type: application/json`</li>
              </ul>
          <h3>Retorno</h3>
-        <p><span class="response-code">200</span> Lista de rodadas.</p>
+        <p><span class="response-code">200</span> Lista de rodadas com detalhes, incluindo informações do criador, hash da blockchain, status e apostas (resumido).</p>
           <div class="code-block">
          [
               {
@@ -210,6 +265,7 @@
                         "betNumber": 2,
                        "betAmount": 10,
                          "win": false,
+                       "type": "par_escolhido", // Tipo da aposta
                        "generatedNumber": 1,
                        "createdAt":"2025-01-27T14:00:00.000Z",
                        "user":{
@@ -217,10 +273,12 @@
                           "name":"Usuário Teste",
                            "email":"teste@teste.com"
                          }
-                      }
+                      },
+                      // ... outras apostas resumidas
                     ]
                   , "updatedAt": "2025-01-27T14:00:00.000Z"
-             }
+             },
+             // ... outras rodadas
           ]
           </div>
              
@@ -228,13 +286,13 @@
 
     <div class="endpoint">
         <h2>GET /dice/:roundId</h2>
-        <p>Lista as informações de uma rodada específica.</p>
+        <p>Retorna detalhes completos de uma rodada específica, incluindo informações do criador, hash da blockchain, status e todas as apostas realizadas nesta rodada com detalhes dos usuários.</p>
            <h3>Parâmetros:</h3>
              <ul>
-               <li>`roundId` (number, path): ID da rodada.</li>
+               <li>`roundId` (number, path): ID da rodada para buscar detalhes.</li>
              </ul>
           <h3>Retorno</h3>
-        <p><span class="response-code">200</span> Retorna as informações da rodada.</p>
+        <p><span class="response-code">200</span> Informações detalhadas da rodada solicitada.</p>
          <div class="code-block">
             {
                    "id": 1,
@@ -254,6 +312,7 @@
                       "betNumber": 2,
                        "betAmount": 10,
                        "win": false,
+                       "type": "par_escolhido", // Tipo da aposta
                     "generatedNumber": 1,
                         "createdAt":"2025-01-27T14:00:00.000Z",
                           "user":{
@@ -261,7 +320,8 @@
                            "name": "Usuário Teste",
                             "email":"teste@teste.com"
                           }
-                    }
+                    },
+                     // ... outras apostas detalhadas
                     ],
                "updatedAt":"2025-01-27T14:00:00.000Z"
                 }
