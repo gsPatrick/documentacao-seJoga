@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da API - Jogo de Dados</title>
+    <style>
+       body { font-family: 'Arial', sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; color: #333; transition: background-color 0.3s ease;}
+        body:hover { background-color: #f0f0f0;}
+        .endpoint { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; background-color: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease; }
+        .endpoint:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .endpoint h2 { margin-top: 0; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .endpoint h3 { color: #34495e; margin-bottom: 10px;}
+        .endpoint p { margin-bottom: 10px; }
+        .endpoint ul { margin-bottom: 10px; padding-left: 20px;}
+        .endpoint li { margin-bottom: 5px; }
+        .code-block { background-color: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; overflow-x: auto;}
+        .response-code { font-weight: bold; color: #27ae60; margin-bottom: 5px; display: block; }
+        .try-it-out { display: inline-block; background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 5px; text-align: center; cursor: pointer; text-decoration: none; transition: background-color 0.3s ease; }
+        .try-it-out:hover { background-color: #2980b9; }
+        .cron-info { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; background-color: #f9f9f9; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+         .cron-info h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+            .cron-info p { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Documentação da API - Jogo de Dados</h1>
+
+     <div class="cron-info">
+            <h2>Lógica do Jogo de Dados</h2>
+               <p>Este jogo de dados utiliza um sistema de hash da blockchain para gerar números aleatórios pseudoaleatórios para o resultado dos dados. </p>
+           <p>  Cada vez que o usuário joga, um número é gerado sequencialmente a partir da seed mais recente da blockchain, garantindo que os números nunca se repitam.</p>
+           <p> Após a geração do número, ele é mapeado para um resultado de dado, ou seja, ele será um número entre 0 e 6.</p>
+        <p>O sistema tem 3 modos de jogo:</p>
+            <ul>
+                <li>**Solo:** O usuário joga um dado e ganha se o número do dado for igual a dezena definida do sorteio, ou seja, um número entre 0 e 6.</li>
+                <li>**Dupla:** O usuário joga dois dados. Nesse tipo o usuario pode escolher:
+                        * Acertar a soma exata dos dois dados em um valor definido da dezena.
+                        * Acertar um resultado exato nos dois dados (1 e 1, 2 e 2, etc.).
+                        * Acertar um número especifico.
+                        * Acertar a soma em um número específico
+                    </li>
+                <li>**Tripla:** O usuário joga três dados, com a mesma lógica de vitória da rodada dupla.</li>
+            </ul>
+        </div>
+
+    <div class="endpoint">
+        <h2>POST /dice/round/system</h2>
+        <p>Cria uma nova rodada do jogo de dados.</p>
+           <h3>Headers</h3>
+            <ul>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+            </ul>
+        <h3>Retorno</h3>
+        <p><span class="response-code">201</span> Rodada de dado criada com sucesso.</p>
+        <div class="code-block">
+            {
+            "id": 1,
+            "createdBy": 1,
+              "hash": "5",
+               "createdAt":"2025-01-27T14:00:00.000Z",
+               "finished": false
+              }
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h2>POST /dice/:roundId/buy-tickets</h2>
+        <p>Compra bilhetes para uma rodada do jogo de dados.</p>
+        <h3>Parâmetros:</h3>
+           <ul>
+                <li>`roundId` (number, path): ID da rodada.</li>
+            </ul>
+             <h3>Headers</h3>
+            <ul>
+               <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+               <li>`Content-Type: application/json`</li>
+            </ul>
+        <h3>Request Body:</h3>
+          <div class="code-block">
+           {
+             "betNumber": 2,
+              "betAmount": 10,
+               "type": "solo" // ou "dupla" ou "tripla"
+            }
+         </div>
+         <h3>Retorno</h3>
+          <p><span class="response-code">201</span> Bilhetes comprados com sucesso.</p>
+          <div class="code-block">
+             {
+                "id": 1,
+                "userId": 1,
+              "roundId": 1,
+                "betNumber": 2,
+               "betAmount": 10,
+                "win": false,
+              "generatedNumber": 1,
+                "createdAt": "2025-01-27T14:00:00.000Z",
+                "updatedAt": "2025-01-27T14:00:00.000Z"
+             }
+         </div>
+    
+        </div>
+
+         <div class="endpoint">
+        <h2>POST /dice/:roundId/finalize</h2>
+        <p>Finaliza manualmente uma rodada de dado.</p>
+          <h3>Parâmetros:</h3>
+            <ul>
+             <li>`roundId` (number, path): ID da rodada.</li>
+          </ul>
+           <h3>Headers</h3>
+            <ul>
+              <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+            </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Rodada de dado finalizada com sucesso.</p>
+           <div class="code-block">
+             {
+              "id": 1,
+               "createdBy": 1,
+             "hash": "1",
+               "createdAt":"2025-01-27T14:00:00.000Z",
+              "finished": true,
+              "bets": [
+                 {
+                     "id": 1,
+                      "userId":1,
+                    "roundId": 1,
+                      "betNumber": 2,
+                      "betAmount": 10,
+                    "win": false,
+                    "generatedNumber": 1,
+                    "createdAt":"2025-01-27T14:00:00.000Z",
+                       "updatedAt": "2025-01-27T14:00:00.000Z"
+                }
+             ],
+             "updatedAt":"2025-01-27T14:00:00.000Z"
+           }
+          </div>
+             
+        </div>
+        
+  <div class="endpoint">
+        <h2>GET /dice/my/rounds</h2>
+        <p>Lista as rodadas do jogo de dado de um usuário específico.</p>
+          <h3>Headers</h3>
+             <ul>
+              <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+            </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Lista de rodadas que o usuario participou.</p>
+         <div class="code-block">
+             [
+                {
+                 "id": 1,
+                  "createdBy": 1,
+                   "hash": "1",
+                "createdAt":"2025-01-27T14:00:00.000Z",
+                "finished":true,
+                  "bets": [
+                     {
+                     "id": 1,
+                        "userId": 1,
+                        "roundId":1,
+                       "betNumber": 2,
+                        "betAmount": 10,
+                        "win": false,
+                      "generatedNumber": 1,
+                      "createdAt":"2025-01-27T14:00:00.000Z",
+                     "updatedAt":"2025-01-27T14:00:00.000Z"
+                     }
+                  ],
+               "updatedAt": "2025-01-27T14:00:00.000Z"
+                }
+             ]
+         </div>
+      
+      </div>
+
+    <div class="endpoint">
+        <h2>GET /dice</h2>
+        <p>Lista todas as rodadas de dado do sistema.</p>
+         <h3>Headers</h3>
+            <ul>
+                 <li>`Authorization: Bearer [seu_token_jwt_valido]`</li>
+                <li>`Content-Type: application/json`</li>
+             </ul>
+         <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Lista de rodadas.</p>
+          <div class="code-block">
+         [
+              {
+                  "id": 1,
+                   "createdBy":{
+                     "id": 1,
+                      "name": "Usuário Teste",
+                     "email":"teste@teste.com"
+                   },
+                   "hash":"00000000000000000001ea9600f71f3988c72fc611e66bc57d7d3e705a9f078d",
+                   "createdAt":"2025-01-27T14:00:00.000Z",
+                   "finished": true,
+                   "bets":[
+                     {
+                        "id": 1,
+                         "userId": 1,
+                        "roundId": 1,
+                        "betNumber": 2,
+                       "betAmount": 10,
+                         "win": false,
+                       "generatedNumber": 1,
+                       "createdAt":"2025-01-27T14:00:00.000Z",
+                       "user":{
+                           "id":1,
+                          "name":"Usuário Teste",
+                           "email":"teste@teste.com"
+                         }
+                      }
+                    ]
+                  , "updatedAt": "2025-01-27T14:00:00.000Z"
+             }
+          ]
+          </div>
+             
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /dice/:roundId</h2>
+        <p>Lista as informações de uma rodada específica.</p>
+           <h3>Parâmetros:</h3>
+             <ul>
+               <li>`roundId` (number, path): ID da rodada.</li>
+             </ul>
+          <h3>Retorno</h3>
+        <p><span class="response-code">200</span> Retorna as informações da rodada.</p>
+         <div class="code-block">
+            {
+                   "id": 1,
+                    "createdBy": {
+                      "id": 1,
+                      "name": "Usuário Teste",
+                      "email":"teste@teste.com"
+                     },
+                   "hash":"00000000000000000001ea9600f71f3988c72fc611e66bc57d7d3e705a9f078d",
+                    "createdAt":"2025-01-27T14:00:00.000Z",
+                   "finished": true,
+                  "bets":[
+                    {
+                        "id": 1,
+                       "userId": 1,
+                     "roundId": 1,
+                      "betNumber": 2,
+                       "betAmount": 10,
+                       "win": false,
+                    "generatedNumber": 1,
+                        "createdAt":"2025-01-27T14:00:00.000Z",
+                          "user":{
+                           "id": 1,
+                           "name": "Usuário Teste",
+                            "email":"teste@teste.com"
+                          }
+                    }
+                    ],
+               "updatedAt":"2025-01-27T14:00:00.000Z"
+                }
+          </div>
+        </div>
+</body>
+</html>
